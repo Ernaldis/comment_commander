@@ -1,0 +1,8 @@
+[package]
+name = "comment_commander"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.2.1", features = ["derive"] }
+termion = { version = "2.0.1" }
