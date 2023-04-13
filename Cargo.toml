@@ -1,7 +1,14 @@
 [package]
 name = "comment_commander"
 version = "0.0.0"
+description = "run commented commands from the top of files"
+authors = ["ernaldis+cargo@pm.me"]
+license = "Mozilla Public License 2.0"
 edition = "2021"
+readme = "README.md"
+repository = "https://github.com/Ernaldis/comment_commander"
+keywords = ["cli", "comment"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 clap = { version = "4.2.1", features = ["derive"] }

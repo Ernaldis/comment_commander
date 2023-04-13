@@ -15,9 +15,16 @@ use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 use termion::{clear, cursor};
 
+/// Run commented commands from the top of a given file
+///
+/// Scroll up and down using the arrow keys
+///
+/// Press <Enter> to execute a commands
+///
+/// Press `q` to quit
 #[derive(Parser)]
 struct Cli {
-    /// The path to the file to read
+    /// The path to the file to pull commands from
     path: std::path::PathBuf,
 }
 
