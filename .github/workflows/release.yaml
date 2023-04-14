@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      dependent-workflow-run-id:
+        description: 'ci'
+        required: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Rust
+      uses: actions/setup-rust@v1
+      with:
+        rust-version: stable
+        profile: release
+    - name: Make a release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: true
+    - name: Build
+      run: cargo build --release
+    - name: Upload Binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: binary
+        path: target/release/comment_commander
+    - name: Publish to cargo
+      run: cargo publish --token ${{ secrets.CARGO_TOKEN }}
