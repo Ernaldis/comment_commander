@@ -15,6 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Cache Rust dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo
+        key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rust-
     - name: Format
       run: cargo fmt --all --check
       
@@ -23,6 +30,13 @@ jobs:
     needs: format
     steps:
     - uses: actions/checkout@v3
+    - name: Cache Rust dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo
+        key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rust-
     - name: Lint
       run: cargo clippy --verbose --fix -- --deny=warnings
       
@@ -31,5 +45,12 @@ jobs:
     needs: [lint, format]
     steps:
     - uses: actions/checkout@v3
+    - name: Cache Rust dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo
+        key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rust-
     - name: Build
       run: cargo build --verbose
