@@ -5,6 +5,11 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: '*'
+  workflow_dispatch:
+    inputs:
+      dependent-workflow-run-id:
+        description: 'test'
+        required: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -12,7 +17,6 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    needs: build
     steps:
     - uses: actions/checkout@v3
     - name: Lint
