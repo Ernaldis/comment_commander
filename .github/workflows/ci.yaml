@@ -42,10 +42,9 @@ jobs:
           toolchain: stable
           components: clippy
           override: false
-    - uses: actions-rs/clippy-check@v1
+    - uses: giraffate/clippy-action@v1
       with:
-        token: ${{ github.token }}
-        args: --verbose
+        reporter: 'github-pr-review'
         
   build:
     runs-on: ubuntu-latest
