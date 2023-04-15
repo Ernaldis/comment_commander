@@ -38,10 +38,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-rust-
     - run: rustup component add clippy
-    - uses: actions-rs/clippy-check@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        args: --all-features
+    - name: Run reviewdog
+      env:
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ github.token }}
+      run: |
+        reviewdog -reporter=github-review -f=clippy
         
   build:
     runs-on: ubuntu-latest
