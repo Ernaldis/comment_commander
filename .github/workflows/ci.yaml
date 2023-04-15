@@ -42,12 +42,10 @@ jobs:
           toolchain: stable
           components: clippy
           override: false
-    - name: Run Clippy with reviewdog
-      uses: giraffate/clippy-action@v1.0.0
-      with:
-        reporter: 'github-pr-review'
-        github_token: ${{ secrets.ACCOUNT_TOKEN }}
-
+    - name: Run Clippy
+      run: cargo clippy -- -D warnings --message-format=json | reviewdog -f=clippy -reporter=github-pr-review -level=warning
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
         
   build:
     runs-on: ubuntu-latest
