@@ -37,12 +37,19 @@ jobs:
         key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-rust-
-    - name: Lint
-      run: cargo clippy --verbose --fix -- --deny=warnings
-      
+    - uses: actions-rs/toolchain@v1
+      with:
+          toolchain: stable
+          components: clippy
+          override: false
+    - uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.ACCOUNT_TOKEN }}
+        args: --verbose
+        
   build:
     runs-on: ubuntu-latest
-    needs: [lint, format]
+    needs: lint
     steps:
     - uses: actions/checkout@v3
     - name: Cache Rust dependencies
