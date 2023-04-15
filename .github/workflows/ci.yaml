@@ -47,7 +47,7 @@ jobs:
     - name: Run Clippy
       run: cargo clippy -- -D warnings --message-format=json | reviewdog -f=clippy -reporter=github-pr-review -level=warning
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
         
   build:
     runs-on: ubuntu-latest
