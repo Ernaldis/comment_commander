@@ -45,7 +45,7 @@ jobs:
           components: clippy
           override: false
     - name: Run Clippy
-      run: cargo clippy -- -D warnings --message-format=json | reviewdog -efm="%f:%l:%c:%m" -name="clippy" -reporter="github-pr-review" -level="warning" --filter-mode="diff_context"
+      run: cargo clippy --verbose -- -D warnings | reviewdog -efm="%f:%l:%c:%m" -name="clippy" -reporter="github-pr-review" -level="warning" --filter-mode="diff_context"
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ACCOUNT_TOKEN }}
         
