@@ -37,6 +37,8 @@ jobs:
         key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-rust-
+    - name: install datadog
+      uses: reviewdog/action-setup@v1
     - uses: actions-rs/toolchain@v1
       with:
           toolchain: stable
