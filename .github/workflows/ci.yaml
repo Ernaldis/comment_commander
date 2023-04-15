@@ -44,7 +44,7 @@ jobs:
           override: false
     - uses: actions-rs/clippy-check@v1
       with:
-        token: ${{ secrets.ACCOUNT_TOKEN }}
+        token: ${{ github.token }}
         args: --verbose
         
   build:
