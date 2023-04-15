@@ -47,6 +47,7 @@ jobs:
         clippy_flags: --no-deps --all-targets --all-features -- -D warnings
         reporter: github-check
         fail_on_error: true
+        filter-mode: nofilter
         
   build:
     runs-on: ubuntu-latest
