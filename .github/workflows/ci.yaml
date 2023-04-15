@@ -38,11 +38,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-rust-
     - name: install clippy
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@nightly
       with:
-          toolchain: stable
-          components: clippy
-          override: true
+        components: clippy
     - name: '🔍 Static analysis: run Clippy'
       uses: giraffate/clippy-action@v1
       with:
