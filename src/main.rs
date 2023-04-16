@@ -72,7 +72,7 @@ fn main() {
             }
             Key::Char('\n') => {
                 let args: Vec<&str> = lines[position].split_whitespace().collect();
-                let output = Command::new(args[0])
+                let output = Command::new(&args[0])
                     .args(&args[1..])
                     .output()
                     .expect("Command failed");
