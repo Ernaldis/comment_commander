@@ -39,7 +39,7 @@ jobs:
           ${{ runner.os }}-rust-
     - run: rustup component add clippy
     - name: run clippy
-      run: cargo clippy --fix -- -D warnings -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used -W clippy::expect_used
+      run: cargo clippy --verbose -- -D warnings -D clippy::pedantic -D clippy::nursery -D clippy::unwrap_used -D clippy::expect_used
         
   build:
     runs-on: ubuntu-latest
