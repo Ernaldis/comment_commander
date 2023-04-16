@@ -1,5 +1,3 @@
-#![allow(unused)]
-
 extern crate termion;
 
 use clap::Parser;
