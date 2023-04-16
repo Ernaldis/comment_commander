@@ -1,17 +1,17 @@
 extern crate termion;
 
 use clap::Parser;
-use std::env;
+
 use std::io::{stdin, stdout, Write};
-use std::iter::TakeWhile;
+
 use std::process::Command;
-use std::thread::sleep;
-use std::time::Duration;
-use termion::cursor::DetectCursorPos;
+
+
+
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
-use termion::{clear, cursor};
+use termion::{clear};
 
 /// Run commented commands from the top of a given file
 ///
@@ -31,7 +31,7 @@ fn main() {
     let content = std::fs::read_to_string(&args.path).expect("could not read file");
     let lines: Vec<String> = content
         .lines()
-        .take_while(|line: &&str| line.starts_with("#"))
+        .take_while(|line: &&str| line.starts_with('#'))
         .map(|line| line[2..].trim().to_string())
         .collect();
 
@@ -52,7 +52,7 @@ fn main() {
     for c in stdin().keys() {
         match c.unwrap() {
             Key::Char('q') => {
-                write!(stdout, "{}{}", clear::CurrentLine, "\n\r").unwrap();
+                write!(stdout, "{}\n\r", clear::CurrentLine).unwrap();
                 stdout.flush().unwrap();
                 break;
             }
@@ -72,7 +72,7 @@ fn main() {
             }
             Key::Char('\n') => {
                 let args: Vec<&str> = lines[position].split_whitespace().collect();
-                let output = Command::new(&args[0])
+                let output = Command::new(args[0])
                     .args(&args[1..])
                     .output()
                     .expect("Command failed");
