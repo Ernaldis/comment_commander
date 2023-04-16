@@ -40,7 +40,7 @@ jobs:
     - run: rustup component add clippy
     - uses: reviewdog/action-setup@v1
     - name: Run reviewdog
-      run: reviewdog -reporter=github-pr-review -f=clippy
+      run: cargo clippy | reviewdog -reporter=github-pr-review -f=clippy
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ github.token }}
         
