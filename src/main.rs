@@ -6,12 +6,10 @@ use std::io::{stdin, stdout, Write};
 
 use std::process::Command;
 
-
-
+use termion::clear;
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
-use termion::{clear};
 
 /// Run commented commands from the top of a given file
 ///
