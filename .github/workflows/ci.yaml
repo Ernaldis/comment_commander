@@ -38,8 +38,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-rust-
     - run: rustup component add clippy
-    - name: run clippy
-      run: cargo clippy --verbose -- -D warnings -D clippy::pedantic -D clippy::nursery -D clippy::unwrap_used -D clippy::expect_used
+    - uses: reviewdog/action-setup@v1
+    - name: Run reviewdog
+      run: |
+        curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+        cargo clippy --message-format=json | reviewdog -reporter=github-pr-review -f=clippy
+      env:
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ github.token }}
         
   build:
     runs-on: ubuntu-latest
