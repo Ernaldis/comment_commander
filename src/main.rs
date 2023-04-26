@@ -74,7 +74,7 @@ fn main() {
                     .args(&args[1..])
                     .output()
                     .expect("Command failed");
-                let output_str = String::from_utf8_lossy(&output.stdout).replace('\n', "\n\r");
+                let output_str = String::from_utf8_lossy(&output.stdout).replace("\n", "\n\r");
                 write!(stdout, "{}{}", clear::CurrentLine, output_str).unwrap();
                 stdout.flush().unwrap();
                 break;
