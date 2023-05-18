@@ -24,16 +24,15 @@ jobs:
           ${{ runner.os }}-rust-
     - name: Format
       run: cargo fmt --all --check
-      
+
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - run: rustup component add clippy
-      - uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.CLIPPY_TOKEN }}
-          args: -- -D warnings -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used -W clippy::expect_used
+      - uses: actions/checkout@v2
+      - name: Install Clippy
+        run: rustup component add clippy
+      - name: Run Clippy
+        run: cargo clippy -- -D warnings -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used -W clippy::expect_used
 
   build:
     runs-on: ubuntu-latest
