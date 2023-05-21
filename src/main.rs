@@ -6,7 +6,8 @@ use std::io::{stdin, stdout, Write};
 
 use std::process::Command;
 
-use termion::clear;
+use termion::clear::CurrentLine as ClearLine;
+use termion::cursor::Restore as RestoreCursor;
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
@@ -24,21 +25,25 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() {
-    let args = Cli::parse();
-    let content = match std::fs::read_to_string(&args.path) {
-        Ok(content) => content,
-        Err(error) => {
-            eprintln!("Could not read file: {error}");
-            return;
-        }
-    };
-
+fn read_lines(path: &std::path::PathBuf) -> Result<Vec<String>, std::io::Error> {
+    let content = std::fs::read_to_string(path)?;
     let lines: Vec<String> = content
         .lines()
         .take_while(|line: &&str| line.starts_with('#'))
         .map(|line| line[2..].trim().to_string())
         .collect();
+    Ok(lines)
+}
+
+fn main() {
+    let args = Cli::parse();
+    let lines = match read_lines(&args.path) {
+        Ok(lines) => lines,
+        Err(error) => {
+            eprintln!("Failed to read file: {error}");
+            return;
+        }
+    };
 
     let mut stdout = match stdout().into_raw_mode() {
         Ok(stdout) => stdout,
@@ -49,29 +54,29 @@ fn main() {
     };
     let mut position = 0;
 
-    write!(
-        stdout,
+    let mut write_and_flush = |text: &str| {
+        if let Err(error) = write!(stdout, "{}", text) {
+            eprintln!("Failed to write to stdout: {}", error);
+            std::process::exit(1);
+        }
+        if let Err(error) = stdout.flush() {
+            eprintln!("Failed to flush stdout: {}", error);
+            std::process::exit(1);
+        }
+    };
+
+    write_and_flush(&format!(
         "{}{}{}{}",
         termion::cursor::Save,
-        clear::CurrentLine,
+        ClearLine,
         lines[position],
-        termion::cursor::Restore
-    )
-    .unwrap();
-
-    if let Err(error) = stdout.flush() {
-        eprintln!("Failed to flush stdout: {error}");
-        return;
-    }
+        RestoreCursor
+    ));
 
     for c in stdin().keys() {
         match c {
             Ok(Key::Char('q')) => {
-                write!(stdout, "{}\n\r", clear::CurrentLine).unwrap();
-                if let Err(error) = stdout.flush() {
-                    eprintln!("Failed to flush stdout: {error}");
-                    return;
-                }
+                write_and_flush(&format!("{ClearLine}\n\r"));
                 break;
             }
             Ok(Key::Up) => {
@@ -98,28 +103,16 @@ fn main() {
                     }
                 };
                 let output_str = String::from_utf8_lossy(&output.stdout).replace('\n', "\n\r");
-                write!(stdout, "{}{}", clear::CurrentLine, output_str).unwrap();
-                if let Err(error) = stdout.flush() {
-                    eprintln!("Failed to flush stdout: {error}");
-                    return;
-                }
+                write_and_flush(&output_str);
                 break;
             }
-            Err(_) => todo!(),
-            _ => todo!(),
+            Err(_) => eprintln!("Failed to read input key"),
+            _ => eprintln!("Unhandled input key"),
         }
         // Move the cursor down one line and write some text
-        write!(
-            stdout,
+        write_and_flush(&format!(
             "{}{}{}",
-            clear::CurrentLine,
-            lines[position],
-            termion::cursor::Restore
-        )
-        .unwrap();
-        if let Err(error) = stdout.flush() {
-            eprintln!("Failed to flush stdout: {error}");
-            return;
-        }
+            ClearLine, lines[position], RestoreCursor
+        ));
     }
 }

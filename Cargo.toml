@@ -1,6 +1,6 @@
 [package]
 name = "comment_commander"
-version = "0.0.1"
+version = "0.0.2"
 description = "run commented commands from the top of files"
 authors = ["ernaldis+cargo@pm.me"]
 license = "MPL-2.0"
