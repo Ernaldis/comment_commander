@@ -55,12 +55,12 @@ fn main() {
     let mut position = 0;
 
     let mut write_and_flush = |text: &str| {
-        if let Err(error) = write!(stdout, "{}", text) {
-            eprintln!("Failed to write to stdout: {}", error);
+        if let Err(error) = write!(stdout, "{text}") {
+            eprintln!("Failed to write to stdout: {error}");
             std::process::exit(1);
         }
         if let Err(error) = stdout.flush() {
-            eprintln!("Failed to flush stdout: {}", error);
+            eprintln!("Failed to flush stdout: {error}");
             std::process::exit(1);
         }
     };
